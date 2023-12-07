@@ -5,6 +5,7 @@ from cog import BasePredictor, Input
 import torch
 from transformers import AutoTokenizer, pipeline
 from auto_gptq import AutoGPTQForCausalLM
+from .model import load_model, load_tokenizer
 
 MODEL_NAME = "TheBloke/Llama-2-7b-Chat-GPTQ"
 MODEL_BASENAME = "gptq_model-4bit-128g"
@@ -14,18 +15,21 @@ use_triton = True
 class Predictor(BasePredictor):
     def setup(self) -> None:
         """Load the model into memory to make running multiple predictions efficient"""
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            MODEL_NAME, 
-            use_fast=True,
-            cache_dir=MODEL_CACHE
-        )
-        model = AutoGPTQForCausalLM.from_quantized(
-            "Llama-2-7b-Chat-GPTQ",
-            use_safetensors=True,
-            device="cuda:0",
-            use_triton=use_triton,
-            quantize_config=None
-        )
+        # self.tokenizer = AutoTokenizer.from_pretrained(
+        #     MODEL_NAME, 
+        #     use_fast=True,
+        #     cache_dir=MODEL_CACHE
+        # )
+        # model = AutoGPTQForCausalLM.from_quantized(
+        #     "Llama-2-7b-Chat-GPTQ",
+        #     use_safetensors=True,
+        #     device="cuda:0",
+        #     use_triton=use_triton,
+        #     quantize_config=None
+        # )
+        self.tokenizer = load_tokenizer()
+        model = load_model()
+
         # Pytorch 2 optimization
         self.model = torch.compile(model)
 
