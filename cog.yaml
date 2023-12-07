@@ -9,7 +9,7 @@ build:
     - "accelerate==0.21.0"
     - "safetensors==0.3.1"
     - "auto_gptq==0.3.0"
-    - "xformers"
+    # - "xformers"
 
   # run:
   #   # - pip install git+https://github.com/huggingface/transformers
