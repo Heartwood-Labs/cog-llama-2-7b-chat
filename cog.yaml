@@ -7,7 +7,7 @@ build:
     - "torch"
     - "transformers==4.33.2"
     - "accelerate"
-    - "safetensors>=0.3.1""
+    - "safetensors>=0.3.1"
     - "auto_gptq"
     # - "xformers"
 
