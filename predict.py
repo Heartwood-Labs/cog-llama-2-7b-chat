@@ -12,30 +12,6 @@ MODEL_DEST = "Llama-2-7B-Chat-GPTQ"
 TOKEN_DEST = "Llama-2-7B-Chat-GPTQ"
 
 
-def get_model(model_name: str, model_cache: str = MODEL_CACHE):
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_NAME,
-        torch_dtype=torch.float16,
-        device_map="auto",
-    )
-    return model
-
-
-def get_tokenizer(model_name: str, model_cache: str = MODEL_CACHE):
-    tokenizer = AutoTokenizer.from_pretrained(
-        MODEL_NAME, use_fast=True, cache_dir=MODEL_CACHE
-    )
-    return tokenizer
-
-
-def load_model(model_dir: str = MODEL_DEST):
-    return get_model(model_dir)
-
-
-def load_tokenizer(token_dir: str = TOKEN_DEST):
-    return get_tokenizer(token_dir)
-
-
 class Predictor(BasePredictor):
     def setup(self) -> None:
         """Load the model into memory to make running multiple predictions efficient"""
@@ -51,8 +27,13 @@ class Predictor(BasePredictor):
         #     use_triton=use_triton,
         #     quantize_config=None
         # )
-        self.tokenizer = load_tokenizer()
-        model = load_model()
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            MODEL_NAME, use_fast=True, cache_dir=MODEL_CACHE
+        )
+
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL_NAME, torch_dtype=torch.float16
+        ).to("cuda")
 
         # Pytorch 2 optimization
         self.model = torch.compile(model)
