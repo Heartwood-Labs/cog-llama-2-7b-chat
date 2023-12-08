@@ -12,7 +12,7 @@ MODEL_DEST = "Llama-2-7B-Chat-GPTQ"
 TOKEN_DEST = "Llama-2-7B-Chat-GPTQ"
 
 
-def get_model(model_name: str, model_cache: str):
+def get_model(model_name: str, model_cache: str = MODEL_CACHE):
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         torch_dtype=torch.float16,
@@ -21,7 +21,7 @@ def get_model(model_name: str, model_cache: str):
     return model
 
 
-def get_tokenizer(model_name: str, model_cache: str):
+def get_tokenizer(model_name: str, model_cache: str = MODEL_CACHE):
     tokenizer = AutoTokenizer.from_pretrained(
         MODEL_NAME, use_fast=True, cache_dir=MODEL_CACHE
     )
