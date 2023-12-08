@@ -15,25 +15,13 @@ TOKEN_DEST = "Llama-2-7B-Chat-GPTQ"
 class Predictor(BasePredictor):
     def setup(self) -> None:
         """Load the model into memory to make running multiple predictions efficient"""
-        # self.tokenizer = AutoTokenizer.from_pretrained(
-        #     MODEL_NAME,
-        #     use_fast=True,
-        #     cache_dir=MODEL_CACHE
-        # )
-        # model = AutoGPTQForCausalLM.from_quantized(
-        #     "Llama-2-7b-Chat-GPTQ",
-        #     use_safetensors=True,
-        #     device="cuda:0",
-        #     use_triton=use_triton,
-        #     quantize_config=None
-        # )
         self.tokenizer = AutoTokenizer.from_pretrained(
             MODEL_NAME, use_fast=True, cache_dir=MODEL_CACHE
         )
 
         model = AutoModelForCausalLM.from_pretrained(
-            MODEL_NAME, torch_dtype=torch.float16
-        ).to("cuda")
+            MODEL_NAME, device_map="auto", trust_remote_code=False, revision="main"
+        )
 
         # Pytorch 2 optimization
         self.model = torch.compile(model)
