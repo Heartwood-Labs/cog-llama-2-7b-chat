@@ -15,7 +15,7 @@ jobs:
       - name: Setup Cog
         uses: replicate/setup-cog@v1
         with:
-          token: ${{ secrets.REPLICATE_API_TOKEN }}
+          token: ${{ secrets.REPLICATE_API_TOKEN_DANIEL }}
 
       - name: Push to Replicate
         run: |
