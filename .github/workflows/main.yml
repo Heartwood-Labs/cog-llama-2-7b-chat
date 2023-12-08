@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Setup Cog
         uses: replicate/setup-cog@v1
