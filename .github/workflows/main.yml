@@ -5,15 +5,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: arboreal-ci
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          lfs: true
+
+      - name: Checkout LFS objects
+        run: git lfs checkout
 
       - name: Setup Cog
         uses: replicate/setup-cog@v1
         with:
-          token: ${{ secrets.REPLICATE_API_TOKEN }}
+          token: ${{ secrets.REPLICATE_API_TOKEN_DANIEL }}
 
       - name: Push to Replicate
         run: |
