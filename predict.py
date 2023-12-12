@@ -56,6 +56,18 @@ class Predictor(BasePredictor):
             le=5,
             default=1.1,
         ),
+        exponential_decay_start: int = Input(
+            description="Number of tokens to wait before starting exponential decay.",
+            default=512,
+            ge=0,
+            le=4096,
+        ),
+        exponential_decay_factor: float = Input(
+            description="Decay factor for LogitProcessor exponential decay.",
+            default=1.0,
+            ge=1.0,
+            le=10.0,
+        ),
     ) -> str:
         """Run a single prediction on the model"""
         prompt_template = f"""[INST] <<SYS>>
@@ -72,6 +84,10 @@ class Predictor(BasePredictor):
             top_p=top_p,
             repetition_penalty=repetition_penalty,
             max_new_tokens=max_new_tokens,
+            exponential_decay_length_penalty=(
+                exponential_decay_start,
+                exponential_decay_factor,
+            ),
         )
         output = self.tokenizer.decode(outputs[0])
         parts = output.split("[/INST]", 1)
